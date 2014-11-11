@@ -1,0 +1,8 @@
+<?php
+
+$mysql_server = "localhost";
+$mysql_db = "fff_xchange";
+$mysql_user = "fff_xchange";
+$mysql_pass = "xxxxxxxxxxxxx";
+
+?>
