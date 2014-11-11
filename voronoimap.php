@@ -1,3 +1,28 @@
+<?php
+try {
+    require ("config.inc.php");
+    $db = new PDO("mysql:host=$mysql_server;dbname=$mysql_db;charset=utf8mb4", $mysql_user, $mysql_pass);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $rs = $db->prepare ( "SELECT * FROM `hoods`" );
+    $rs->execute ();
+} catch ( PDOException $e ) {
+    exit($e);
+}
+
+$hoods = array();
+while ( $result = $rs->fetch ( PDO::FETCH_ASSOC ) ) {
+    if ($result ['lat'] > 0 && $result ['lon'] > 0) {
+	    array_push($hoods, array(
+	        'name' => $result ['name'],
+			'type' => $result ['name'],
+			'lat' => $result ['lat'],
+			'lon' => $result ['lon'],
+			'color' => "#F00" 
+	    ));
+	}
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -369,49 +394,7 @@ p {
 	var Burghaslach = new L.LatLng(49.733, 10.6); // Zentrum von Feifunk-franken
 	map.setView(Burghaslach, 9);
 	
-	points = [{
-		"name": "default",
-		"type": "default",
-		"lat": "-1",
-		"lon": "-1",
-		"color": "#F00" 
-	}, {
-		"name": "fuerth",
-		"type": "fuerth",
-		"lat": "49.481899",
-		"lon": "10.971136",
-		"color": "#F00"
-	}, {
-		"name": "nuernberg",
-		"type": "nuernberg",
-		"lat": "49.448856931202",
-		"lon": "11.082108258271",
-		"color": "#F00"
-	}, {
-		"name": "ansbach",
-		"type": "ansbach",
-		"lat": "49.300833",
-		"lon": "10.571667",
-		"color": "#F00"
-	}, {
-		"name": "ha\u00dfberge",
-		"type": "hassberge",
-		"lat": "50.093555895082",
-		"lon": "10.568013390003",
-		"color": "#F00"
-	}, {
-		"name": "erlangen",
-		"type": "erlangen",
-		"lat": "49.6005981",
-		"lon": "11.0019221",
-		"color": "#F00"
-	}, {
-		"name": "wuerzburg",
-		"type": "wuerzburg",
-		"lat": "49.79688",
-		"lon": "9.93489",
-		"color": "#F00"
-	}];
+	points = JSON.parse('<?php echo json_encode($hoods) ?>');
 	
 	voronoiMap(map, points);
 	</script>
