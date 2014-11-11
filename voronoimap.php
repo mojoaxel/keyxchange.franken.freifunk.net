@@ -199,28 +199,28 @@ p {
 
 
 <body>
-	<div id='map'>
-	</div>
+	<div id='map'></div>
 	<div id='selections' class="selections">
-	<a href='#' class="show"></a>
-	<div class='content'>
-		<a href='#' class="hide">Hide</a>
-		<div id="toggles">
+		<a href='#' class="show"></a>
+		<div class='content'>
+			<a href='#' class="hide">Hide</a>
+			<div id="toggles"></div>
 		</div>
 	</div>
-	</div>
-	<div id='loading'>
-	</div>
+	<div id='loading'></div>
 	<div id='selected'>
-	<h1>Explore supermarkets in the UK</h1>
+		<h1>The Freifunk-Franken "hoods" visualized as voronoi charts</h1>
 	</div>
 	<div id='about'>
-	<a href='#' class="show">About</a>
-	<p class='content'>
-		Explore Freifunk Franken Hoods. Created by <a href="http://wunschik.it">Alexander Wunschik</a> havely based on a example by <a href="http://chriszetter.com">Chris Zetter</a>, maps copyright <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>.
-		<a href='#' class="hide">Hide</a>
+		<a href='#' class="show">About</a>
+		<p class='content'>
+			Explore Freifunk Franken Hoods. Created by <a href="http://wunschik.it">Alexander Wunschik</a> 
+			havely based on a example by <a href="http://chriszetter.com">Chris Zetter</a>, 
+			maps copyright <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>.
+			<a href='#' class="hide">Hide</a>
+		</p>
 	</div>
-	</div>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
 	<script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js"></script>
 	
