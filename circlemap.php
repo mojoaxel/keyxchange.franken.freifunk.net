@@ -37,10 +37,9 @@ function init() {
     map.attributionControl.setPrefix(''); // Don't show the 'Powered by Leaflet' text.
     
     // Location to centre the map
-    var Heilsbronn = new L.LatLng(49.33861, 10.79083); //Zentrum von Franken
+    //var Heilsbronn = new L.LatLng(49.33861, 10.79083); //Zentrum von Franken
     var Burghaslach = new L.LatLng(49.733, 10.6); // Zentrum von Feifunk-franken
-
-    var Fuerth = new L.LatLng(49.47833, 10.99027); //Zentrum von meiner Welt
+    //var Fuerth = new L.LatLng(49.47833, 10.99027); //Zentrum von meiner Welt
 
     map.setView(Burghaslach, 9);
  
@@ -54,10 +53,8 @@ function init() {
 
     for (var h = 0; h<=hoods.length-1; h++) { 
         var hood = hoods[h];
-
         var circleLocation = new L.LatLng(hood.lat, hood.lon);
         var circle = new L.Circle(circleLocation, hood.radius*1000, circleOptions);
-        
         map.addLayer(circle);
     }
 }
