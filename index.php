@@ -27,6 +27,33 @@ class db {
 	}
 }
 
+/**
+ * returns details error msg (as json)
+ *
+ * @param integer $code
+ *        	HTTP error 400, 500 or 503
+ * @param string $msg
+ *        	Error message text
+ */
+function showError($code, $msg) {
+	if ($code == 400) {
+		header ( "HTTP/1.0 400 Bad Request" );
+	} else if ($code == 500) {
+		header ( "HTTP/1.0 500 Internal Server Error" );
+	} else if ($code == 503) {
+		header ( "HTTP/1.0 503 Service Unavailable" );
+	}
+	header ( "Content-Type: application/json" );
+
+	$errorObject = array (
+			'error' => array (
+					'msg' => $msg,
+					'url' => "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]"
+			)
+	);
+	print_r ( json_encode ( $errorObject ) );
+}
+
 if (isset ( $_SERVER ['HTTP_X_FORWARDED_FOR'] ) && $_SERVER ['HTTP_X_FORWARDED_FOR'])
 	$ip = $_SERVER ['HTTP_X_FORWARDED_FOR'];
 if (isset ( $_GET ['mac'] ) && $_GET ['mac'])
@@ -47,7 +74,7 @@ $gateway = false;
 
 if ($ip && $name && $key) {
 	if (! preg_match ( '/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}' . '[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}' . '[a-zA-Z0-9]))*$/', $name ))
-		exit ( "invalid name" );
+		exit ( showError ( 400, "invalid name" ) );
 	
 	if ($mac != $INVALID_MAC)
 		$sql = 'SELECT * FROM nodes WHERE mac = :mac;';
@@ -62,11 +89,11 @@ if ($ip && $name && $key) {
 			$rs->bindParam ( ':name', $name );
 		$rs->execute ();
 	} catch ( PDOException $e ) {
-		exit ( $e );
+		exit ( showError ( 500, $e ) );
 	}
 	
 	if ($rs->rowCount () > 1)
-		exit ( "To much nodes with mac=$mac, name=$name" );
+		exit ( showError ( 500, "To much nodes with mac=$mac, name=$name" ) );
 	
 	if ($rs->rowCount () == 1) {
 		$result = $rs->fetch ( PDO::FETCH_ASSOC );
@@ -84,7 +111,7 @@ if ($ip && $name && $key) {
 				$rs->bindParam ( ':port', $port );
 				$rs->execute ();
 			} catch ( PDOException $e ) {
-				exit ( $e );
+				exit ( showError ( 500, $e ) );
 			}
 		}
 	} else {
@@ -99,7 +126,7 @@ if ($ip && $name && $key) {
 			$rs->bindParam ( ':hood', $hood );
 			$rs->execute ();
 		} catch ( PDOException $e ) {
-			exit ( $e );
+			exit ( showError ( 500, $e ) );
 		}
 	}
 }
@@ -114,7 +141,7 @@ try {
 	$rs->bindParam ( ':hood', $hood );
 	$rs->execute ();
 } catch ( PDOException $e ) {
-	exit ( $e );
+	exit ( showError ( 500, $e ) );
 }
 
 if ($rs->rowCount () > 0) {
