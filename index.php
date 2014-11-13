@@ -1,4 +1,12 @@
 <?php
+/**
+ * Handle VPN-Key-Exchange request for Freifunk-Franken.
+ *
+ * @author RedDog <reddog@mastersword.de>
+ * @author delphiN <freifunk@wunschik.net>
+ *
+ * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0
+ */
 
 class db {
 	private static $instance = NULL;
