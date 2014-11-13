@@ -3,7 +3,6 @@ $mysql_db = "example";
 $mysql_user = "example";
 $mysql_pass = "example";
 
-$delete_time = 60 * 60 * 24 * 30;
 class db {
 	private static $instance = NULL;
 	private function __construct() {
@@ -23,8 +22,6 @@ class db {
 	}
 }
 
-// if (isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'])
-// $ip = $_SERVER['REMOTE_ADDR'];
 if (isset ( $_SERVER ['HTTP_X_FORWARDED_FOR'] ) && $_SERVER ['HTTP_X_FORWARDED_FOR'])
 	$ip = $_SERVER ['HTTP_X_FORWARDED_FOR'];
 if (isset ( $_GET ['mac'] ) && $_GET ['mac'])
@@ -132,9 +129,5 @@ if ($rs->rowCount () > 0) {
 	}
 	echo "###\n";
 }
-
-/*
- * DEFEKT $sql = 'DELETE FROM nodes WHERE readonly = 0 AND `timestamp`+'.$delete_time.' < CURRENT_TIMESTAMP;'; try { $rs = db::getInstance()->prepare($sql); $rs->bindParam(':hood', $hood); $rs->execute(); } catch (PDOException $e) { exit($e); }
- */
 
 ?>
