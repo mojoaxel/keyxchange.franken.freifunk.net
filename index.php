@@ -8,6 +8,9 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.txt AGPL-3.0
  */
 
+$DEFAULT_HOOD_ID = 1;
+$INVALID_MAC = '000000000000';
+
 class db {
 	private static $instance = NULL;
 	private function __construct() {
@@ -29,7 +32,7 @@ if (isset ( $_SERVER ['HTTP_X_FORWARDED_FOR'] ) && $_SERVER ['HTTP_X_FORWARDED_F
 if (isset ( $_GET ['mac'] ) && $_GET ['mac'])
 	$mac = $_GET ['mac'];
 else
-	$mac = '000000000000';
+	$mac = $INVALID_MAC;
 if (isset ( $_GET ['name'] ) && $_GET ['name'])
 	$name = $_GET ['name'];
 if (isset ( $_GET ['key'] ) && $_GET ['key'])
@@ -39,21 +42,21 @@ if (isset ( $_GET ['port'] ) && $_GET ['port'])
 else
 	$port = 10000;
 
-$hood = 1; // default hood
+$hood = $DEFAULT_HOOD_ID;
 $gateway = false;
 
 if ($ip && $name && $key) {
 	if (! preg_match ( '/^([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}' . '[a-zA-Z0-9])(\.([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]{0,61}' . '[a-zA-Z0-9]))*$/', $name ))
 		exit ( "invalid name" );
 	
-	if ($mac != '000000000000')
+	if ($mac != $INVALID_MAC)
 		$sql = 'SELECT * FROM nodes WHERE mac = :mac;';
 	else
 		$sql = 'SELECT * FROM nodes WHERE mac = \'000000000000\' AND name = :name;';
 	
 	try {
 		$rs = db::getInstance ()->prepare ( $sql );
-		if ($mac != '000000000000')
+		if ($mac != $INVALID_MAC)
 			$rs->bindParam ( ':mac', $mac );
 		else
 			$rs->bindParam ( ':name', $name );
@@ -117,7 +120,7 @@ try {
 if ($rs->rowCount () > 0) {
 	while ( $result = $rs->fetch ( PDO::FETCH_ASSOC ) ) {
 		$filename = $result ['mac'];
-		if ($filename == '000000000000')
+		if ($filename == $INVALID_MAC)
 			$filename = $result ['name'];
 		
 		echo "####" . $filename . ".conf\n";
