@@ -1,20 +1,13 @@
 <?php
 
-$mysql_db = "example";
-$mysql_user = "example";
-$mysql_pass = "example";
-
 class db {
 	private static $instance = NULL;
 	private function __construct() {
 	}
 	public static function getInstance() {
 		if (! self::$instance) {
-			global $mysql_db;
-			global $mysql_user;
-			global $mysql_pass;
-			self::$instance = new PDO ( "mysql:host=localhost;dbname=$mysql_db", $mysql_user, $mysql_pass );
-			;
+			require ("config.inc.php");
+			self::$instance = new PDO("mysql:host=$mysql_server;dbname=$mysql_db", $mysql_user, $mysql_pass);
 			self::$instance->setAttribute ( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 		}
 		return self::$instance;
