@@ -1,43 +1,61 @@
--- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (i686)
+-- phpMyAdmin SQL Dump
+-- version 3.4.11.1deb2+deb7u1
+-- http://www.phpmyadmin.net
 --
--- Host: localhost    Database: fff_xchange
--- ------------------------------------------------------
--- Server version	5.5.38-0+wheezy1
+-- Host: localhost
+-- Erstellungszeit: 10. Nov 2014 um 15:02
+-- Server Version: 5.5.38
+-- PHP-Version: 5.4.4-14+deb7u14
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `hoods`
+-- Datenbank: `fff_xchange`
 --
 
-DROP TABLE IF EXISTS `hoods`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `hoods` (
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `hoods`
+--
+
+CREATE TABLE IF NOT EXISTS `hoods` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `net` varchar(255) NOT NULL,
+  `lat` double NOT NULL,
+  `lon` double NOT NULL,
+  `radius` float NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
--- Table structure for table `nodes`
+-- Daten für Tabelle `hoods`
 --
 
-DROP TABLE IF EXISTS `nodes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `nodes` (
+INSERT INTO `hoods` (`ID`, `name`, `net`, `lat`, `lon`, `radius`) VALUES
+(1, 'default', '10.50.16.0/20', -1, -1, -1),
+(2, 'fuerth', '10.50.32.0/21', 49.47833, 10.99027, 4),
+(3, 'nuernberg', '10.50.40.0/21', 49.448856931202, 11.082108258271, 10),
+(4, 'ansbach', '10.50.48.0/21', 49.300833, 10.571667, 10),
+(5, 'haßberge', '10.50.56.0/22', 50.093555895082, 10.568013390003, 10),
+(6, 'erlangen', '10.50.64.0/21', 49.6005981, 11.0019221, 10),
+(7, 'wuerzburg', '10.50.72.0/21', 49.79688, 9.93489, 20);
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `nodes`
+--
+
+CREATE TABLE IF NOT EXISTS `nodes` (
   `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `mac` varchar(30) NOT NULL DEFAULT '000000000000',
   `name` varchar(255) NOT NULL,
@@ -51,16 +69,8 @@ CREATE TABLE `nodes` (
   PRIMARY KEY (`ID`),
   KEY `mac` (`mac`),
   KEY `hood_ID` (`hood_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=337 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=569 ;
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2014-07-30 21:07:56
