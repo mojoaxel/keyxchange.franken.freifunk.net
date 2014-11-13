@@ -1,4 +1,5 @@
-<?
+<?php
+
 $mysql_db = "example";
 $mysql_user = "example";
 $mysql_pass = "example";
