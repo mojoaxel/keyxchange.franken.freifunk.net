@@ -29,7 +29,7 @@ while ( $result = $rs->fetch ( PDO::FETCH_ASSOC ) ) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link href='https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.css' rel='stylesheet' />
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
 <style>
 body {
 	margin: 0;
@@ -47,13 +47,14 @@ p {
 	pointer-events: all;
 	stroke: #000;
 	stroke-opacity: .2;
+	stroke-width: 4px;
 }
 
 .point-cell:hover, .point-cell.selected {
 	fill: none;
-	stroke: #000;
+	stroke: #F00;
 	stroke-opacity: .6;
-	stroke-width: 2px;
+	stroke-width: 4px;
 }
 
 .point-cell.selected {
@@ -214,15 +215,16 @@ p {
 	<div id='about'>
 		<a href='#' class="show">About</a>
 		<p class='content'>
-			Explore Freifunk Franken Hoods. Created by <a href="http://wunschik.it">Alexander Wunschik</a> 
+			Explore Freifunk Franken Hoods. <br/>
+			Created by <a href="http://wunschik.it">Alexander Wunschik</a> 
 			havely based on a example by <a href="http://chriszetter.com">Chris Zetter</a>, 
-			maps copyright <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox and OpenStreetMap</a>.
+			maps copyright OpenStreetMap</a>.
 			<a href='#' class="hide">Hide</a>
 		</p>
 	</div>
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script>
-	<script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
 	
 	<script>
 	showHide = function(selector) {
@@ -258,16 +260,21 @@ p {
 
 		var drawPointTypeSelection = function() {
 			showHide('#selections')
-			labels = d3.select('#toggles').selectAll('input').data(
-					pointTypes.values()).enter().append("label");
+			labels = d3.select('#toggles')
+					.selectAll('input')
+					.data(pointTypes.values()).enter()
+					.append("label");
 
-			labels.append("input").attr('type', 'checkbox').property('checked',
-					true).attr("value", function(d) {
-				return d.type;
-			}).on("change", drawWithLoading);
+			labels.append("input")
+					.attr('type', 'checkbox')
+					.property('checked', true)
+					.attr("value", function(d) {
+						return d.type;
+					 }).on("change", drawWithLoading);
 
-			labels.append("span").attr('class', 'key').style('background-color',
-					function(d) {
+			labels.append("span")
+					.attr('class', 'key')
+					.style('background-color', function(d) {
 						return d.color;
 					});
 
@@ -337,33 +344,43 @@ p {
 				d.point.cell = d;
 			});
 
-			var svg = d3.select(map.getPanes().overlayPane).append("svg").attr(
-					'id', 'overlay').attr("class", "leaflet-zoom-hide").style(
-					"width", map.getSize().x + 'px').style("height",
-					map.getSize().y + 'px').style("margin-left", topLeft.x + "px")
-					.style("margin-top", topLeft.y + "px");
+			var svg = d3.select(map.getPanes().overlayPane)
+						.append("svg")
+						.attr('id', 'overlay')
+						.attr("class", "leaflet-zoom-hide")
+						.style("width", map.getSize().x + 'px')
+						.style("height", map.getSize().y + 'px')
+						.style("margin-left", topLeft.x + "px")
+						.style("margin-top", topLeft.y + "px");
 
-			var g = svg.append("g").attr("transform",
-					"translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")");
+			var g = svg.append("g")
+						.attr("transform", "translate(" + (-topLeft.x) + "," + (-topLeft.y) + ")");
 
-			var svgPoints = g.attr("class", "points").selectAll("g").data(
-					filteredPoints).enter().append("g").attr("class", "point");
+			var svgPoints = g.attr("class", "points")
+						.selectAll("g")
+						.data(filteredPoints).enter()
+						.append("g")
+						.attr("class", "point");
 
 			var buildPathFromPoint = function(point) {
 				return "M" + point.cell.join("L") + "Z";
 			}
 
-			svgPoints.append("path").attr("class", "point-cell").attr("d",
-					buildPathFromPoint).on('click', selectPoint).classed(
-					"selected", function(d) {
-						return lastSelectedPoint == d
-					});
+			svgPoints.append("path")
+						.attr("class", "point-cell")
+						.attr("d", buildPathFromPoint)
+						.attr("stroke-width", 4)
+						.on('click', selectPoint)
+						.classed("selected", function(d) {
+							return lastSelectedPoint == d
+						});
 
-			svgPoints.append("circle").attr("transform", function(d) {
-				return "translate(" + d.x + "," + d.y + ")";
-			}).style('fill', function(d) {
-				return d.color
-			}).attr("r", 2);
+			svgPoints.append("circle")
+						.attr("transform", function(d) {
+							return "translate(" + d.x + "," + d.y + ")";
+						 }).style('fill', function(d) {
+							return d.color
+						 }).attr("r", 2);
 		}
 
 		var mapLayer = {
@@ -375,21 +392,23 @@ p {
 
 		showHide('#about');
 
-		map.on('ready', function() {
-			points.forEach(function(point) {
-				pointTypes.set(point.type, {
-					type : point.type,
-					color : point.color
-				});
-			})
-			drawPointTypeSelection();
-			map.addLayer(mapLayer);
-		});
+		points.forEach(function(point) {
+			pointTypes.set(point.type, {
+				type : point.type,
+				color : point.color
+			});
+		})
+		drawPointTypeSelection();
+		map.addLayer(mapLayer);
 	}
 	</script>
 	
 	<script>
-	var map = L.mapbox.map('map', 'examples.map-i86nkdio');
+	var map = L.map('map').setView([49.47508, 10.99273], 18);
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: 'Map data &copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
+		maxZoom: 18
+	}).addTo(map);
 	
 	var Burghaslach = new L.LatLng(49.733, 10.6); // Zentrum von Feifunk-franken
 	map.setView(Burghaslach, 9);
